@@ -6,6 +6,8 @@
 #include "adapter.h"
 #include "polybuzzer.h"
 #include "keycodes.h"
+#include <UniversalTimer.h>
+extern UniversalTimer timeoutSilence;
 
 #define MILLISECOND 1
 #define SECOND (1000 * MILLISECOND)
@@ -27,10 +29,28 @@ void VailAdapter::midiKey(uint8_t key, bool down) {
 
 // Send a keyboard key event
 void VailAdapter::keyboardKey(uint8_t key, bool down) {
+    if(timeoutSilence.isRunning()==false){
+       timeoutSilence.start();
+       Keyboard.press(KEY_LEFT_CTRL);
+       Keyboard.press(KEY_LEFT_SHIFT);
+       delay(20);
+
+       for(size_t i=0; i<SILENCE_AMOUNT; i++){
+          Keyboard.press(KEY_DOWN_ARROW);
+          delay(20);
+          Keyboard.release(KEY_DOWN_ARROW);
+          delay(20);
+       }
+       Keyboard.release(KEY_LEFT_SHIFT);
+       Keyboard.release(KEY_LEFT_CTRL);
+    }else{
+       timeoutSilence.resetTimerValue(); 
+    }
     if (down) {
         Keyboard.press(key);
     } else {
         Keyboard.release(key);
+        
     }
 }
 

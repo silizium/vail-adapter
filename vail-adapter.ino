@@ -1,4 +1,3 @@
-// Copyright 2020 Neale Pickett
 // Distributed under the MIT license
 // Please see https://github.com/nealey/vail-adapter/
 
@@ -10,6 +9,7 @@
 #include "touchbounce.h"
 #include "adapter.h"
 #include "keycodes.h"
+#include <UniversalTimer.h>
 
 #define DIT_PIN 2
 #define DAH_PIN 1
@@ -25,6 +25,8 @@
 
 #define MILLISECOND 1
 #define SECOND (1 * MILLISECOND)
+
+UniversalTimer timeoutSilence(TIMEOUT_SILENCE, delay);
 
 bool trs = false; // true if a TRS plug is in a TRRS jack
 uint16_t iambicDelay = 80 * MILLISECOND;
@@ -115,5 +117,21 @@ void loop() {
   if (dah.update() || qt_dah.update()) {
     bool pressed = !dah.read() || qt_dah.read();
     adapter.HandlePaddle(PADDLE_DAH, pressed);
+  }
+
+  if(timeoutSilence.check()==true){
+    timeoutSilence.resetTimerValue();
+    timeoutSilence.stop();
+    Keyboard.press(KEY_LEFT_CTRL);
+    Keyboard.press(KEY_LEFT_SHIFT);
+    delay(20);
+    for(size_t i=0; i<SILENCE_AMOUNT; i++){
+       Keyboard.press(KEY_UP_ARROW);
+       delay(20);
+       Keyboard.release(KEY_UP_ARROW);
+       delay(20);
+    }
+    Keyboard.release(KEY_LEFT_SHIFT);
+    Keyboard.release(KEY_LEFT_CTRL);
   }
 }
