@@ -9,6 +9,7 @@
 #include "bounce2.h"
 #include "touchbounce.h"
 #include "adapter.h"
+#include "keycodes.h"
 
 #define DIT_PIN 2
 #define DAH_PIN 1
@@ -20,8 +21,6 @@
 #define LED_ON false // Xiao inverts this logic for some reason
 #define LED_OFF (!LED_ON)
 
-#define DIT_KEYBOARD_KEY KEY_LEFT_CTRL
-#define DAH_KEYBOARD_KEY KEY_RIGHT_CTRL
 #define TONE 3000
 
 #define MILLISECOND 1

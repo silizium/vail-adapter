@@ -5,6 +5,7 @@
 #include "keyers.h"
 #include "adapter.h"
 #include "polybuzzer.h"
+#include "keycodes.h"
 
 #define MILLISECOND 1
 #define SECOND (1000 * MILLISECOND)
@@ -37,7 +38,7 @@ void VailAdapter::keyboardKey(uint8_t key, bool down) {
 void VailAdapter::BeginTx() {
     this->buzzer->Note(0, this->txNote);
     if (this->keyboardMode) {
-        this->keyboardKey(KEY_LEFT_CTRL, true);
+        this->keyboardKey(STRAIGHT_KEYBOARD_KEY, true);
     } else {
         this->midiKey(0, true);
     }
@@ -47,7 +48,7 @@ void VailAdapter::BeginTx() {
 void VailAdapter::EndTx() {
     this->buzzer->NoTone(0);
     if (this->keyboardMode) {
-        this->keyboardKey(KEY_LEFT_CTRL, false);
+        this->keyboardKey(STRAIGHT_KEYBOARD_KEY, false);
     } else {
         this->midiKey(0, false);
     }
@@ -69,7 +70,7 @@ void VailAdapter::HandlePaddle(Paddle paddle, bool pressed) {
         if (this->keyer) {
             this->keyer->Key(paddle, pressed);
         } else if (this->keyboardMode) {
-            this->keyboardKey(KEY_LEFT_CTRL, pressed);
+            this->keyboardKey(DIT_KEYBOARD_KEY, pressed);
         } else {
             this->midiKey(1, pressed);
         }
@@ -78,7 +79,7 @@ void VailAdapter::HandlePaddle(Paddle paddle, bool pressed) {
         if (this->keyer) {
             this->keyer->Key(paddle, pressed);
         } else if (this->keyboardMode) {
-            this->keyboardKey(KEY_RIGHT_CTRL, pressed);
+            this->keyboardKey(DAH_KEYBOARD_KEY, pressed);
         } else {
             this->midiKey(2, pressed);
         }
