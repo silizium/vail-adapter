@@ -9,7 +9,6 @@
 #include "touchbounce.h"
 #include "adapter.h"
 #include "keycodes.h"
-#include <UniversalTimer.h>
 
 #define DIT_PIN 2
 #define DAH_PIN 1
@@ -26,8 +25,12 @@
 #define MILLISECOND 1
 #define SECOND (1 * MILLISECOND)
 
+#ifdef TIMEOUT_SILENCE
+#include <UniversalTimer.h>
 UniversalTimer timeoutSilence(TIMEOUT_SILENCE, delay);
+#endif
 
+VailAdapter adapter = VailAdapter(PIEZO);
 bool trs = false; // true if a TRS plug is in a TRRS jack
 uint16_t iambicDelay = 80 * MILLISECOND;
 Bounce dit = Bounce();
@@ -36,7 +39,6 @@ Bounce key = Bounce();
 TouchBounce qt_dit = TouchBounce();
 TouchBounce qt_dah = TouchBounce();
 TouchBounce qt_key = TouchBounce();
-VailAdapter adapter = VailAdapter(PIEZO);
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
@@ -119,19 +121,21 @@ void loop() {
     adapter.HandlePaddle(PADDLE_DAH, pressed);
   }
 
+#ifdef TIMEOUT_SILENCE
   if(timeoutSilence.check()==true){
     timeoutSilence.resetTimerValue();
     timeoutSilence.stop();
-    Keyboard.press(KEY_LEFT_CTRL);
-    Keyboard.press(KEY_LEFT_SHIFT);
+    Keyboard.press(KEY_LEFT_ALT);
+    Keyboard.press(KEY_RIGHT_SHIFT);
     delay(20);
     for(size_t i=0; i<SILENCE_AMOUNT; i++){
        Keyboard.press(KEY_UP_ARROW);
-       delay(20);
+       delay(10);
        Keyboard.release(KEY_UP_ARROW);
        delay(20);
     }
-    Keyboard.release(KEY_LEFT_SHIFT);
-    Keyboard.release(KEY_LEFT_CTRL);
+    Keyboard.release(KEY_RIGHT_SHIFT);
+    Keyboard.release(KEY_LEFT_ALT);
   }
+#endif
 }

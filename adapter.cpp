@@ -29,23 +29,25 @@ void VailAdapter::midiKey(uint8_t key, bool down) {
 
 // Send a keyboard key event
 void VailAdapter::keyboardKey(uint8_t key, bool down) {
+#ifdef TIMEOUT_SILENCE
     if(timeoutSilence.isRunning()==false){
        timeoutSilence.start();
-       Keyboard.press(KEY_LEFT_CTRL);
-       Keyboard.press(KEY_LEFT_SHIFT);
+       Keyboard.press(KEY_LEFT_ALT);
+       Keyboard.press(KEY_RIGHT_SHIFT);
        delay(20);
 
        for(size_t i=0; i<SILENCE_AMOUNT; i++){
           Keyboard.press(KEY_DOWN_ARROW);
-          delay(20);
+          delay(10);
           Keyboard.release(KEY_DOWN_ARROW);
           delay(20);
        }
-       Keyboard.release(KEY_LEFT_SHIFT);
-       Keyboard.release(KEY_LEFT_CTRL);
+       Keyboard.release(KEY_RIGHT_SHIFT);
+       Keyboard.release(KEY_LEFT_ALT);
     }else{
        timeoutSilence.resetTimerValue(); 
     }
+#endif
     if (down) {
         Keyboard.press(key);
     } else {
