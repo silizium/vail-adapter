@@ -60,7 +60,7 @@ void VailAdapter::BeginTx() {
     if (this->keyboardMode) {
         this->keyboardKey(STRAIGHT_KEYBOARD_KEY, true);
     } else {
-        this->midiKey(0, true);
+        //this->midiKey(0, true);
         this->midiKey(MIDI_KEY, true);
     }
 }
@@ -71,7 +71,7 @@ void VailAdapter::EndTx() {
     if (this->keyboardMode) {
         this->keyboardKey(STRAIGHT_KEYBOARD_KEY, false);
     } else {
-        this->midiKey(0, false);
+        //this->midiKey(0, false);
         this->midiKey(MIDI_KEY, false);
     }
 }
