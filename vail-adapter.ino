@@ -127,13 +127,21 @@ void loop() {
     timeoutSilence.stop();
     Keyboard.press(KEY_LEFT_ALT);
     Keyboard.press(KEY_RIGHT_SHIFT);
-    delay(20);
+    delay(10);
+    Keyboard.press(KEY_END);
+    delay(10);
+    Keyboard.release(KEY_END);
+    delay(10);
+
+    /*
+    delay(10);
     for(size_t i=0; i<SILENCE_AMOUNT; i++){
        Keyboard.press(KEY_UP_ARROW);
        delay(10);
        Keyboard.release(KEY_UP_ARROW);
-       delay(20);
+       delay(15);
     }
+    */
     Keyboard.release(KEY_RIGHT_SHIFT);
     Keyboard.release(KEY_LEFT_ALT);
   }

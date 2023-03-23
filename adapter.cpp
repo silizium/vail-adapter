@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <Keyboard.h>
 #include <MIDIUSB.h>
+#include <pitchToNote.h>
 #include <cstddef>
 #include "keyers.h"
 #include "adapter.h"
@@ -34,14 +35,11 @@ void VailAdapter::keyboardKey(uint8_t key, bool down) {
        timeoutSilence.start();
        Keyboard.press(KEY_LEFT_ALT);
        Keyboard.press(KEY_RIGHT_SHIFT);
-       delay(20);
-
-       for(size_t i=0; i<SILENCE_AMOUNT; i++){
-          Keyboard.press(KEY_DOWN_ARROW);
-          delay(10);
-          Keyboard.release(KEY_DOWN_ARROW);
-          delay(20);
-       }
+       delay(10);
+       Keyboard.press(KEY_END);
+       delay(10);
+       Keyboard.release(KEY_END);
+       delay(10);
        Keyboard.release(KEY_RIGHT_SHIFT);
        Keyboard.release(KEY_LEFT_ALT);
     }else{
@@ -63,6 +61,7 @@ void VailAdapter::BeginTx() {
         this->keyboardKey(STRAIGHT_KEYBOARD_KEY, true);
     } else {
         this->midiKey(0, true);
+        this->midiKey(MIDI_KEY, true);
     }
 }
 
@@ -73,6 +72,7 @@ void VailAdapter::EndTx() {
         this->keyboardKey(STRAIGHT_KEYBOARD_KEY, false);
     } else {
         this->midiKey(0, false);
+        this->midiKey(MIDI_KEY, false);
     }
 }
 
